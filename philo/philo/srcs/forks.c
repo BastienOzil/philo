@@ -6,7 +6,7 @@
 /*   By: bozil <bozil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 23:38:03 by bozil             #+#    #+#             */
-/*   Updated: 2025/05/19 16:20:22 by bozil            ###   ########.fr       */
+/*   Updated: 2025/05/19 20:13:20 by bozil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,21 @@ int	init_forks(t_data *data)
 	return (0);
 }
 
-int	take_left_fork(t_philo *philo)
+int take_left_fork(t_philo *philo)
 {
-	if (is_dead(philo->data))
-		return (0);
-	pthread_mutex_lock(philo->left_fork);
-	print_status(philo, "has taken a fork");
-	if (philo->right_fork == NULL)
-	{
-		smart_sleep(philo, philo->data->time_to_die * 2);
-		pthread_mutex_unlock(philo->left_fork);
-		return (0);
-	}
-	return (1);
+    if (is_dead(philo->data))
+        return (0);
+    
+    pthread_mutex_lock(philo->left_fork);
+    print_status(philo, "has taken a fork");
+    if (philo->data->number_of_philosophers == 1)
+    {
+        smart_sleep(philo, philo->data->time_to_die * 2);
+        pthread_mutex_unlock(philo->left_fork);
+        return (0);
+    }
+    
+    return (1);
 }
 
 int	take_right_fork(t_philo *philo)

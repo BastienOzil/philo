@@ -6,7 +6,7 @@
 /*   By: bozil <bozil@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:48:03 by bozil             #+#    #+#             */
-/*   Updated: 2025/05/19 13:54:46 by bozil            ###   ########.fr       */
+/*   Updated: 2025/05/19 20:11:25 by bozil            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,28 @@ void	update_meal_info(t_philo *philo)
 	pthread_mutex_unlock(&philo->meals_mutex);
 }
 
-void	eat(t_philo *philo)
+void eat(t_philo *philo)
 {
-	if (is_dead(philo->data))
-		return ;
-	if (philo->left_fork < philo->right_fork)
-	{
-		if (!take_left_fork(philo))
-			return ;
-		if (!take_right_fork(philo))
-			return ;
-	}
-	else
-	{
-		if (!take_right_fork_first(philo))
-			return ;
-		if (!take_left_fork_after_right(philo))
-			return ;
-	}
-	print_status(philo, "is eating");
-	update_meal_info(philo);
-	smart_sleep(philo, philo->data->time_to_eat);
-	release_forks(philo);
+    if (is_dead(philo->data))
+        return;
+    if (philo->id % 2 == 0)
+    {
+        if (!take_left_fork(philo))
+            return;
+        if (!take_right_fork(philo))
+            return;
+    }
+    else
+    {
+        if (!take_right_fork_first(philo))
+            return;
+        if (!take_left_fork_after_right(philo))
+            return;
+    }
+    print_status(philo, "is eating");
+    update_meal_info(philo);
+    smart_sleep(philo, philo->data->time_to_eat);
+    release_forks(philo);
 }
 
 void	philo_sleep(t_philo *philo)
